@@ -1,4 +1,4 @@
-public class GraphEdge {
+public class GraphEdge {OMERIED
     private GraphNode from;
     private GraphNode to;
     GraphEdge(GraphNode from, GraphNode to)
