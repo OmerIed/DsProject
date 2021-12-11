@@ -1,15 +1,15 @@
 public class GraphNode {
     private final int key;
-    private AdjacencyListNode outFirst;
-    private AdjacencyListNode outLast;
-    private AdjacencyListNode inFirst;
-    private AdjacencyListNode inLast;
+    private AdjacencyListNode<GraphEdge> outFirst;
+    private AdjacencyListNode<GraphEdge> outLast;
+    private AdjacencyListNode<GraphEdge> inFirst;
+    private AdjacencyListNode<GraphEdge> inLast;
     public GraphNode(int key)
     {
         this.key = key;
-        outFirst = new AdjacencyListNode();
+        outFirst = new AdjacencyListNode<GraphEdge>();
         outLast = outFirst;
-        inFirst = new AdjacencyListNode();
+        inFirst = new AdjacencyListNode<GraphEdge>();
         inLast = inFirst;
     }
     public int getKey(){
@@ -21,11 +21,11 @@ public class GraphNode {
     public int getInDegree(){
         return inFirst.getLength();
     }
-    public AdjacencyListNode getOutEdges()
+    public AdjacencyListNode<GraphEdge> getOutEdges()
     {
         return outFirst;
     }
-    public AdjacencyListNode getInEdges()
+    public AdjacencyListNode<GraphEdge> getInEdges()
     {
         return inFirst;
     }
