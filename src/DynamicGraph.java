@@ -26,6 +26,8 @@ public class DynamicGraph {
 
     }
     public void deleteEdge(GraphEdge edge) {
+        edgeList.remove(edgeList.get);
+        edge.get
 
 
     }
