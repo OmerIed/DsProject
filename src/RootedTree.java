@@ -1,7 +1,5 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class RootedTree {
     private GraphNode root;
@@ -9,11 +7,10 @@ public class RootedTree {
         this.root = null;
     }
     public void printByLayer(DataOutputStream out) throws IOException {
-        // we save the root in a linked list
-        LinkedList<GraphNode> current_layer = new LinkedList<GraphNode>();
-        current_layer.addFirst(root);
-        LinkedList<GraphNode> next_layer = new LinkedList<GraphNode>();
-        LinkedList<GraphNode> temp;
+        // we save the root in a list
+        AdjacencyListNode current_layer = new AdjacencyListNode(root);
+        AdjacencyListNode next_layer = new AdjacencyListNode();
+        AdjacencyListNode temp;
         //the loop adds the childs of the current layer nodes
         while (!current_layer.isEmpty())
         {
@@ -36,7 +33,23 @@ public class RootedTree {
             }
         }
     }
-    public void preorderPrint(DataOutputStream out){
+
+    public void preorderPrint(DataOutputStream out) throws IOException {
+        preorderAux(out, root);
+    }
+
+    public void preorderAux(DataOutputStream out, GraphNode x) throws IOException {
+        if(x == null){
+            return;
+        }
+        else
+        {
+            out.writeInt(x.getKey());
+            for(GraphNode child: x.getOutEdges())
+            {
+                preorderAux(out, child);
+            }
+        }
 
     }
 
