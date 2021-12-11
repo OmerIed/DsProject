@@ -15,14 +15,18 @@ public class DynamicGraph {
 
     }
     public void deleteNode(GraphNode node){
-        node.getInDegree() !=
+        if(node.getInDegree() == 0 && node.getOutDegree() == 0 ){
+            node.getPrev().setNext(node.getNext());
+            node.getNext().setPrev(node.getPrev());
+        }
 
     }
     public GraphEdge insertEdge(GraphNode from, GraphNode to){
-        e
+
 
     }
     public void deleteEdge(GraphEdge edge) {
+
 
     }
     public  RootedTree scc(){
