@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class GraphNode {
     private final int key;
     private AdjacencyListNode outFirst;

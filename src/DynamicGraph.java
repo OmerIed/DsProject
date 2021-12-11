@@ -5,6 +5,7 @@ public class DynamicGraph {
 
     }
     public GraphNode insertNode(int nodeKey){
+        GraphNode node = new GraphNode(nodeKey)
 
     }
     public void deleteNode(GraphNode node){
