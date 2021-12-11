@@ -9,7 +9,7 @@ public class GraphEdge {
     {
         this.from = from;
         this.to = to;
-        to.getLast
+        fromNext = from.getInLast().
         this.fromNext = null;
         this.fromPrev = null;
         this.toNext = null;
