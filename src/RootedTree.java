@@ -16,10 +16,10 @@ public class RootedTree {
         while (!current_layer.isEmpty())
         {
             GraphNode node = current_layer.getCurrent();
-            AdjacencyListNode<GraphEdge> edgeList = node.getOutEdges();
-            while (!edgeList.isEmpty())
+            GraphEdge edge = node.getInFirst();
+            while (edge != null)
             {
-                GraphNode child = edgeList.getCurrent().getTo();
+                GraphNode child = edge.getTo();
                 if(next_layer.isEmpty()) {
                     next_layer.setCurrent(child);
                     next_layer_last = next_layer;
@@ -29,7 +29,7 @@ public class RootedTree {
                     next_layer_last.setNext(child);
                     next_layer_last = next_layer_last.getNext();
                 }
-                edgeList = edgeList.getNext();
+                edge = edge.getFromNext();
 
             }
             out.writeInt(node.getKey());
@@ -59,9 +59,14 @@ public class RootedTree {
         else
         {
             out.writeInt(x.getKey());
-            for(GraphNode child: x.getOutEdges())
+            //TODO MAKE SURE that the comma is not printed on the last node
+            out.writeUTF(",");
+            GraphEdge edge = x.getOutFirst();
+            if (edge!=null)
+            while (edge != null)
             {
-                preorderAux(out, child);
+                preorderAux(out, edge.getTo());
+                edge = edge.getFromNext();
             }
         }
 

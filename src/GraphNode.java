@@ -21,23 +21,23 @@ public class GraphNode {
     }
     public int getOutDegree(){
         GraphEdge edge = outFirst;
-        int count
+        int count = 0;
         while (edge!=null)
         {
-
+            count++;
+            edge = edge.getFromNext();
         }
-        return outFirst.getLength();
+        return count;
     }
     public int getInDegree(){
-        return inFirst.getLength();
-    }
-    public GraphEdge getOutEdges()
-    {
-        return outFirst;
-    }
-    public GraphEdge getInEdges()
-    {
-        return inFirst;
+        GraphEdge edge = inFirst;
+        int count = 0;
+        while (edge!=null)
+        {
+            count++;
+            edge = edge.getToNext();
+        }
+        return count;
     }
 
     public void setNext(GraphNode next) {
