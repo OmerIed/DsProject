@@ -20,6 +20,12 @@ public class GraphNode {
         return this.key;
     }
     public int getOutDegree(){
+        GraphEdge edge = outFirst;
+        int count
+        while (edge!=null)
+        {
+
+        }
         return outFirst.getLength();
     }
     public int getInDegree(){
@@ -56,5 +62,29 @@ public class GraphNode {
 
     public GraphEdge getOutLast() {
         return outLast;
+    }
+
+    public void setInLast(GraphEdge inLast) {
+        this.inLast = inLast;
+    }
+
+    public void setOutLast(GraphEdge outLast) {
+        this.outLast = outLast;
+    }
+
+    public GraphEdge getInFirst() {
+        return inFirst;
+    }
+
+    public GraphEdge getOutFirst() {
+        return outFirst;
+    }
+
+    public void setInFirst(GraphEdge inFirst) {
+        this.inFirst = inFirst;
+    }
+
+    public void setOutFirst(GraphEdge outFirst) {
+        this.outFirst = outFirst;
     }
 }
