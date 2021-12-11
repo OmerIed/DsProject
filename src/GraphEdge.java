@@ -9,11 +9,12 @@ public class GraphEdge {
     {
         this.from = from;
         this.to = to;
-        fromPrev = from.getInLast();
-        from.getOutLast().(this);
-        this.fromNext = null;
-        this.fromPrev = null;
-        this.toNext = null;
+        setFromPrev(from.getInLast());
+        setFromNext(null);
+        setToNext(null);
+        setToPrev(to.getOutLast());
+        to.setInLast(this);
+        from.setOutLast(this);
     }
 
     public void setFromNext(GraphEdge fromNext) {
