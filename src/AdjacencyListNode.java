@@ -30,10 +30,12 @@ public class AdjacencyListNode<T> {
 
     public void setNext(T node) {
         this.next = new AdjacencyListNode<T>(node);
+        this.next.previous = this;
     }
 
     public void setPrevious(T node) {
         this.previous = new AdjacencyListNode<T>(node);
+        this.previous.next = this;
     }
     public int getLength()
     {
