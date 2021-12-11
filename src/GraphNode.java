@@ -2,29 +2,33 @@ import java.util.ArrayList;
 
 public class GraphNode {
     private final int key;
-    private AdjacencyListNode outEdges;
-    private AdjacencyListNode inEdges;
+    private AdjacencyListNode outFirst;
+    private AdjacencyListNode outLast;
+    private AdjacencyListNode inFirst;
+    private AdjacencyListNode inLast;
     public GraphNode(int key)
     {
         this.key = key;
-        outEdges = new AdjacencyListNode();
-        inEdges = new AdjacencyListNode();
+        outFirst = new AdjacencyListNode();
+        outLast = outFirst;
+        inFirst = new AdjacencyListNode();
+        inLast = inFirst;
     }
     public int getKey(){
         return this.key;
     }
     public int getOutDegree(){
-        return outEdges.getLength();
+        return outFirst.getLength();
     }
     public int getInDegree(){
-        return inEdges.getLength();
+        return inFirst.getLength();
     }
     public AdjacencyListNode getOutEdges()
     {
-        return outEdges;
+        return outFirst;
     }
     public AdjacencyListNode getInEdges()
     {
-        return inEdges;
+        return inFirst;
     }
 }

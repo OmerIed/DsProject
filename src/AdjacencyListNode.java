@@ -30,8 +30,6 @@ public class AdjacencyListNode {
 
     public void setNext(GraphNode node) {
         this.next = new AdjacencyListNode(node);
-        this.last = this.next;
-
     }
 
     public void setPrevious(GraphNode node) {
