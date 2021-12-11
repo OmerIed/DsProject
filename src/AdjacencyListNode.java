@@ -50,7 +50,7 @@ public class AdjacencyListNode<T> {
     public boolean isEmpty(){
         return value == null;
     }
-    public void remove(){
+    public void remove(GraphNode node){
         if (this.previous != null)
         {
             this.previous.next = this.next;
