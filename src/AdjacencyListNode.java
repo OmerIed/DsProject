@@ -71,4 +71,23 @@ public class AdjacencyListNode<T> {
         }
         this.value = null;
     }
+    public void remove(AdjacencyListNode<T> node){
+        if (node.previous != null)
+        {
+            node.previous.next = node.next;
+            if(node.next != null){
+                node.next.previous = node.previous;
+            }
+            node.next = null;
+            node.previous = null;
+        }
+        else
+        {
+            if(node.next != null){
+                node.next.previous = null;
+            }
+            node.next = null;
+        }
+        node.value = null;
+    }
 }
