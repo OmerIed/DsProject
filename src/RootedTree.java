@@ -8,18 +8,32 @@ public class RootedTree {
     }
     public void printByLayer(DataOutputStream out) throws IOException {
         // we save the root in a list
-        AdjacencyListNode current_layer = new AdjacencyListNode(root);
-        AdjacencyListNode next_layer = new AdjacencyListNode();
-        AdjacencyListNode temp;
+        AdjacencyListNode<GraphNode> current_layer = new AdjacencyListNode<GraphNode>(root);
+        AdjacencyListNode<GraphNode> next_layer = new AdjacencyListNode<GraphNode>();
+        AdjacencyListNode<GraphNode> next_layer_last = next_layer;
+        AdjacencyListNode<GraphNode> temp;
         //the loop adds the childs of the current layer nodes
         while (!current_layer.isEmpty())
         {
-            GraphNode node = current_layer.pollLast();
-            for(GraphNode child: node.getOutEdges())
+            GraphNode node = current_layer.getCurrent();
+            AdjacencyListNode<GraphEdge> edgeList = node.getOutEdges();
+            while (!edgeList.isEmpty())
             {
-                next_layer.addFirst(child);
+                GraphNode child = edgeList.getCurrent().getTo();
+                if(next_layer.isEmpty()) {
+                    next_layer.setCurrent(child);
+                    next_layer_last = next_layer;
+                }
+                else
+                {
+                    next_layer_last.setNext(child);
+                    next_layer_last = next_layer_last.getNext();
+                }
+                edgeList = edgeList.getNext();
+
             }
             out.writeInt(node.getKey());
+            current_layer = current_layer.getNext();
             if(!current_layer.isEmpty())
             {
                 out.writeUTF(",");
