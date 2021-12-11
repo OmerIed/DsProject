@@ -1,29 +1,35 @@
 public class DynamicGraph {
-    AdjacencyListNode<GraphEdge> edgeList;
-    AdjacencyListNode<GraphNode> vertexList;
-
+    GraphNode firstNode;
+    GraphNode lastNode;
     public DynamicGraph()
     {
-        AdjacencyListNode<GraphEdge> edgeList = new AdjacencyListNode<>();
-        AdjacencyListNode<GraphNode> vertexList = new AdjacencyListNode<>();
-
+        firstNode = null;
+        lastNode = null;
     }
     public GraphNode insertNode(int nodeKey){
-        GraphNode node = new GraphNode(nodeKey);
-        vertexList.setNext(node);
-        return vertexList.getCurrent();
-
+        if(firstNode==null)
+        {
+            firstNode = new GraphNode(nodeKey);
+            lastNode = firstNode;
+        }
+        else
+        {
+            lastNode.setNext(new GraphNode(nodeKey));
+        }
+        return  lastNode;
     }
     public void deleteNode(GraphNode node){
         if(node.getInDegree() == 0 && node.getOutDegree() == 0 ){
             node.getPrev().setNext(node.getNext());
             node.getNext().setPrev(node.getPrev());
+            node.setNext(null);
+            node.setPrev(null);
         }
 
     }
     public GraphEdge insertEdge(GraphNode from, GraphNode to){
-
-
+        GraphEdge edge = new GraphEdge(from, to);
+        return edge;
     }
     public void deleteEdge(GraphEdge edge) {
         if (edge == edge.getTo().getInFirst()) {
@@ -76,8 +82,11 @@ public class DynamicGraph {
     }
 
 
-    public  RootedTree scc(){
+    public RootedTree scc(){
 
     }
     public RootedTree bfs(GraphNode source)
+    {
+
+    }
 }
