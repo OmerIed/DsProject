@@ -6,6 +6,8 @@ public class GraphNode {
     private GraphEdge inLast;
     private GraphNode next;
     private GraphNode prev;
+    private GraphNode parent;
+    private String color;
     public GraphNode(int key)
     {
         this.key = key;
@@ -13,8 +15,10 @@ public class GraphNode {
         outLast = null;
         inFirst = null;
         inLast = null;
+        this.parent = null;
         this.next = null;
         this.prev = null;
+        this.color = null;
     }
     public int getKey(){
         return this.key;
@@ -42,6 +46,7 @@ public class GraphNode {
 
     public void setNext(GraphNode next) {
         this.next = next;
+        next.setPrev(this);
     }
 
     public GraphNode getNext() {
@@ -54,6 +59,7 @@ public class GraphNode {
 
     public void setPrev(GraphNode prev) {
         this.prev = prev;
+        prev.setNext(this);
     }
 
     public GraphEdge getInLast() {
@@ -86,5 +92,29 @@ public class GraphNode {
 
     public void setOutFirst(GraphEdge outFirst) {
         this.outFirst = outFirst;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+    public GraphNode copyEdgesAndKey(){
+        GraphNode node = new GraphNode(this.key);
+        node.setInFirst(this.inFirst);
+        node.setInLast(this.inLast);
+        node.setOutLast(this.outLast);
+        node.setOutFirst(this.outFirst);
+        return node;
+    }
+
+    public GraphNode getParent() {
+        return parent;
+    }
+
+    public void setParent(GraphNode parent) {
+        this.parent = parent;
     }
 }
