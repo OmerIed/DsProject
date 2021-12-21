@@ -11,12 +11,17 @@ public class RootedTree {
         AdjacencyListNode<GraphNode> current_layer = new AdjacencyListNode<GraphNode>(root);
         AdjacencyListNode<GraphNode> next_layer = new AdjacencyListNode<GraphNode>();
         AdjacencyListNode<GraphNode> next_layer_last = next_layer;
+        AdjacencyListNode<GraphNode>  current_layer_start = current_layer;
         AdjacencyListNode<GraphNode> temp;
         //the loop adds the childs of the current layer nodes
-        while (!current_layer.isEmpty())
+        while (current_layer != null && !current_layer.isEmpty())
         {
+            if(current_layer.getPrevious() == null)
+            {
+                current_layer_start = current_layer;
+            }
             GraphNode node = current_layer.getCurrent();
-            GraphEdge edge = node.getInFirst();
+            GraphEdge edge = node.getOutFirst();
             while (edge != null)
             {
                 GraphNode child = edge.getTo();
@@ -32,18 +37,20 @@ public class RootedTree {
                 edge = edge.getFromNext();
 
             }
-            out.writeInt(node.getKey());
+
+            out.writeBytes(String.valueOf(node.getKey()));
             current_layer = current_layer.getNext();
-            if(!current_layer.isEmpty())
+            if(current_layer != null && !current_layer.isEmpty())
             {
-                out.writeUTF(",");
+                out.writeBytes(",");
             }
             else
             {
                 temp = current_layer;
                 current_layer = next_layer;
-                next_layer = temp;
-                out.writeUTF("\n");
+                current_layer_start.remove(current_layer_start);
+                next_layer = current_layer_start;
+                out.writeBytes(System.lineSeparator());
             }
         }
     }
@@ -58,11 +65,10 @@ public class RootedTree {
         }
         else
         {
-            out.writeInt(x.getKey());
+            out.writeBytes(String.valueOf(x.getKey()));
             //TODO MAKE SURE that the comma is not printed on the last node
-            out.writeUTF(",");
+            out.writeBytes(",");
             GraphEdge edge = x.getOutFirst();
-            if (edge!=null)
             while (edge != null)
             {
                 preorderAux(out, edge.getTo());

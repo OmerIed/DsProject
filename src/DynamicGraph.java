@@ -7,14 +7,16 @@ public class DynamicGraph {
         lastNode = null;
     }
     public GraphNode insertNode(int nodeKey){
-        if(firstNode==null)
+        GraphNode node = new GraphNode(nodeKey);
+        if(firstNode == null)
         {
-            firstNode = new GraphNode(nodeKey);
+            firstNode = node;
             lastNode = firstNode;
         }
         else
         {
-            lastNode.setNext(new GraphNode(nodeKey));
+            lastNode.setNext(node);
+            lastNode = node;
         }
         return  lastNode;
     }
@@ -86,7 +88,7 @@ public class DynamicGraph {
         RootedTree tree = new RootedTree();
         tree.setRoot(new GraphNode(0));
         DynamicGraph dg = this.createCopy();
-        GraphNode u = dfs(dg.firstNode);
+        GraphNode u = dfs(this.firstNode);
         transposeGraph(u);
         u = dfs(u);
         while ( u != null)
@@ -109,6 +111,8 @@ public class DynamicGraph {
             u.setInLast(edge);
             u = u.getNext();
         }
+        this.firstNode = dg.firstNode;
+        this.lastNode = dg.lastNode;
         return tree;
     }
     public DynamicGraph createCopy()
@@ -146,6 +150,7 @@ public class DynamicGraph {
                 edge.setFromNext(edge.getToNext());
                 edge = edge.getFromNext();
             }
+            node = node.getNext();
         }
     }
     public GraphNode dfs(GraphNode g)
@@ -178,7 +183,7 @@ public class DynamicGraph {
         return u_start;
     }
 
-    public GraphNode dfs_visit(GraphNode graph_node, GraphNode u)
+    private GraphNode dfs_visit(GraphNode graph_node, GraphNode u)
     {
         graph_node.setColor("g");
         GraphEdge edge = graph_node.getOutFirst();
@@ -200,6 +205,8 @@ public class DynamicGraph {
     }
     public RootedTree bfs(GraphNode source)
     {
-
+        return null;
     }
+    //private bfs_init(GraphNode source,)
+
 }

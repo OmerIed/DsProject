@@ -9,14 +9,30 @@ public class GraphEdge {
     {
         this.from = from;
         this.to = to;
-        setFromPrev(from.getOutLast());
-        from.getOutLast().setFromNext(this);
-        setFromNext(null);
-        setToNext(null);
-        setToPrev(to.getInLast());
-        to.getInLast().setToNext(this);
-        to.setInLast(this);
-        from.setOutLast(this);
+        // inserting edge to head of the list from and to nodes.
+        if(from.getOutFirst() != null) {
+            from.getOutFirst().setFromPrev(this);
+        }
+        else
+        {
+            from.setOutLast(this);
+        }
+        this.setFromNext(from.getOutFirst());
+        from.setOutFirst(this);
+
+        if(to.getInFirst() != null)
+        {
+            to.getInFirst().setToPrev(this);
+        }
+        else
+        {
+            to.setInLast(this);
+        }
+        this.setToNext(to.getInFirst());
+        to.setInFirst(this);
+        this.setFromPrev(null);
+        this.setToPrev(null);
+
     }
 
     public void setFromNext(GraphEdge fromNext) {
