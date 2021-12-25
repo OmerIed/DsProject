@@ -47,7 +47,7 @@ public class GraphNode {
     public void setNext(GraphNode next) {
         this.next = next;
         // preventing infinity loop
-        if(next.getPrev() != this)
+        if(next!=null && next.getPrev() != this)
             next.setPrev(this);
     }
 
@@ -62,7 +62,7 @@ public class GraphNode {
     public void setPrev(GraphNode prev) {
         this.prev = prev;
         // preventing infinity loop
-        if(prev.getNext() != this)
+        if(prev!=null&&prev.getNext() != this)
             prev.setNext(this);
     }
 
