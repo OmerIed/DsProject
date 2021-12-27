@@ -7,9 +7,9 @@ public class AdjacencyListNode<T> {
         this.value = null;
         this.previous = null;
     }
-    public AdjacencyListNode(T node) {
+    public AdjacencyListNode(T item) {
         this.next = null;
-        this.value = node;
+        this.value = item;
         this.previous = null;
     }
     public T getCurrent() {
@@ -28,13 +28,13 @@ public class AdjacencyListNode<T> {
         this.value = current;
     }
 
-    public void setNext(T node) {
-        this.next = new AdjacencyListNode<T>(node);
+    public void setNext(T item) {
+        this.next = new AdjacencyListNode<T>(item);
         this.next.previous = this;
     }
 
-    public void setPrevious(T node) {
-        this.previous = new AdjacencyListNode<T>(node);
+    public void setPrevious(T item) {
+        this.previous = new AdjacencyListNode<T>(item);
         this.previous.next = this;
     }
     public int getLength()
@@ -52,42 +52,24 @@ public class AdjacencyListNode<T> {
     public boolean isEmpty(){
         return value == null;
     }
-    public void remove(GraphNode node){
-        if (this.previous != null)
+
+    public void remove(AdjacencyListNode<T> item){
+        if (item.previous != null)
         {
-            this.previous.next = this.next;
-            if(this.next != null){
-                this.next.previous = this.previous;
+            item.previous.next = item.next;
+            if(item.next != null){
+                item.next.previous = item.previous;
             }
-            this.next = null;
-            this.previous = null;
+            item.next = null;
+            item.previous = null;
         }
         else
         {
-            if(this.next != null){
-                this.next.previous = null;
+            if(item.next != null){
+                item.next.previous = null;
             }
-            this.next = null;
+            item.next = null;
         }
-        this.value = null;
-    }
-    public void remove(AdjacencyListNode<T> node){
-        if (node.previous != null)
-        {
-            node.previous.next = node.next;
-            if(node.next != null){
-                node.next.previous = node.previous;
-            }
-            node.next = null;
-            node.previous = null;
-        }
-        else
-        {
-            if(node.next != null){
-                node.next.previous = null;
-            }
-            node.next = null;
-        }
-        node.value = null;
+        item.value = null;
     }
 }

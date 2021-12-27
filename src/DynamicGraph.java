@@ -1,6 +1,8 @@
 public class DynamicGraph {
     GraphNode firstNode;
     GraphNode lastNode;
+    AdjacencyListNode<GraphEdge> firstEdge;
+    AdjacencyListNode<GraphEdge> lastEdge;
     public DynamicGraph()
     {
         firstNode = null;
@@ -31,6 +33,15 @@ public class DynamicGraph {
     }
     public GraphEdge insertEdge(GraphNode from, GraphNode to){
         GraphEdge edge = new GraphEdge(from, to);
+        if(lastEdge == null) {
+            lastEdge = new AdjacencyListNode<>(edge);
+            firstEdge = lastEdge;
+        }
+        else
+        {
+            lastEdge.setNext(edge);
+            lastEdge = lastEdge.getNext();
+        }
         return edge;
     }
     public void deleteEdge(GraphEdge edge) {
@@ -79,7 +90,7 @@ public class DynamicGraph {
         edge.setToNext(null);
         edge.setFromPrev(null);
         edge.setFromNext(null);
-        edge.setFromPrev(null);
+        edge.setToPrev(null);
         edge.setFrom(null);
     }
 
