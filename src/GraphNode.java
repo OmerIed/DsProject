@@ -7,6 +7,8 @@ public class GraphNode {
     private GraphNode next;
     private GraphNode prev;
     private GraphNode parent;
+    private GraphNode leftChild;
+    private GraphNode rightSibling;
     private String color;
     public GraphNode(int key)
     {
@@ -19,6 +21,8 @@ public class GraphNode {
         this.next = null;
         this.prev = null;
         this.color = null;
+        this.leftChild = null;
+        this.rightSibling = null;
     }
     public int getKey(){
         return this.key;
@@ -111,6 +115,7 @@ public class GraphNode {
         node.setInLast(this.inLast);
         node.setOutLast(this.outLast);
         node.setOutFirst(this.outFirst);
+        node.setParent(this.parent);
         return node;
     }
 
@@ -120,5 +125,21 @@ public class GraphNode {
 
     public void setParent(GraphNode parent) {
         this.parent = parent;
+    }
+
+    public GraphNode getLeftChild() {
+        return leftChild;
+    }
+
+    public GraphNode getRightSibling() {
+        return rightSibling;
+    }
+
+    public void setLeftChild(GraphNode leftChild) {
+        this.leftChild = leftChild;
+    }
+
+    public void setRightSibling(GraphNode rightSibling) {
+        this.rightSibling = rightSibling;
     }
 }
