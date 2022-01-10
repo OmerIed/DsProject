@@ -45,7 +45,15 @@ public class DynamicGraph {
     }
 
     public void deleteEdge(GraphEdge edge) {
-        if (edge == edge.getTo().getInFirst()) {
+        GraphEdge infirst = edge.getTo().getInFirst();
+        GraphEdge inlast = edge.getTo().getInLast();
+        GraphEdge outlast = edge.getFrom().getOutLast();
+        GraphEdge outfirst = edge.getFrom().getOutFirst();
+
+        if (edge == infirst && edge == inlast) {
+            edge.getTo().setInFirst(null);
+            edge.getTo().setInLast(null);
+        } else if (edge == infirst){
             if (edge.getToNext() != null) {
                 edge.getTo().setInFirst(edge.getToNext());
                 edge.getToNext().setToPrev(null);
@@ -53,7 +61,8 @@ public class DynamicGraph {
                 edge.getTo().setInFirst(null);
                 edge.getTo().setInLast(null);
             }
-        } else if (edge == edge.getTo().getInLast()) {
+        }
+        else if (edge == inlast) {
             if (edge.getToPrev() != null) {
                 edge.getTo().setInLast(edge.getToPrev());
                 edge.getToPrev().setToNext(null);
@@ -66,7 +75,11 @@ public class DynamicGraph {
             edge.getToNext().setToPrev(edge.getToPrev());
         }
 
-        if (edge == edge.getFrom().getOutFirst()) {
+        if (edge == outfirst && edge == outlast) {
+            edge.getFrom().setOutFirst(null);
+            edge.getFrom().setOutLast(null);
+        } else if(edge == outfirst)
+        {
             if (edge.getFromNext() != null) {
                 edge.getFrom().setOutFirst(edge.getFromNext());
                 edge.getFromNext().setFromPrev(null);
@@ -74,7 +87,8 @@ public class DynamicGraph {
                 edge.getFrom().setOutFirst(null);
                 edge.getFrom().setOutLast(null);
             }
-        } else if (edge == edge.getFrom().getOutLast()) {
+        }
+        else if (edge == outlast) {
             if (edge.getFromPrev() != null) {
                 edge.getFrom().setOutLast(edge.getFromPrev());
                 edge.getFromPrev().setFromNext(null);
@@ -100,8 +114,18 @@ public class DynamicGraph {
         tree.setRoot(new GraphNode(0));
         //DynamicGraph dg = this.createCopy();
         cleanTree(this.firstNode);
-        AdjacencyListNode<GraphNode> u_start = dfs(this.firstNode);
+        GraphNode u_node = this.firstNode;
+        AdjacencyListNode<GraphNode> u_start = new AdjacencyListNode<>(u_node);
         AdjacencyListNode<GraphNode> u = u_start;
+        u_node = u_node.getNext();
+        while (u_node!=null)
+        {
+            u.setNext(u_node);
+            u = u.getNext();
+            u_node = u_node.getNext();
+        }
+        u_start = dfs(u_start);
+        u = u_start;
         while (u != null) {
             if (u.getNext() != null)
                 u.getCurrent().setNext(u.getNext().getCurrent());
@@ -109,9 +133,9 @@ public class DynamicGraph {
                 u.getCurrent().setNext(null);
             u = u.getNext();
         }
-        transposeGraph(u_start.getCurrent());
-        u = dfs(u_start.getCurrent());
-        transposeGraph(u_start.getCurrent());
+        transposeGraph(u_start);
+        u = dfs(u_start);
+        transposeGraph(u_start);
         GraphNode node = u.getCurrent();
         //GraphNode gPi = node.copyEdgesAndKey();
         //GraphNode newNode = gPi;
@@ -131,11 +155,31 @@ public class DynamicGraph {
             node = node.getNext();
 
         }
-        node = u.getCurrent();
+        //node = u.getCurrent();
         //newNode = gPi;
-        return getRootedTree(node, tree);
+        return getRootedTree(u, tree);
     }
-
+    private RootedTree getRootedTree(AdjacencyListNode<GraphNode> node, RootedTree tree) {
+        while (node != null) {
+            GraphNode parent;
+            if (node.getCurrent().getParent() == null )
+                parent = tree.getRoot();
+            else
+                parent = node.getCurrent().getParent();
+            if (parent.getLastChild() != null) {
+                parent.getLastChild().setRightSibling(node.getCurrent());
+                parent.setLastChild(node.getCurrent());
+            }
+            else
+            {
+                parent.setLastChild(node.getCurrent());
+                parent.setLeftChild(node.getCurrent());
+            }
+//            parent.setLeftChild(node);
+            node = node.getNext();
+        }
+        return tree;
+    }
     public DynamicGraph createCopy() {
         GraphNode node = firstNode;
         DynamicGraph dg = new DynamicGraph();
@@ -152,17 +196,16 @@ public class DynamicGraph {
         return dg;
     }
 
-    public void transposeGraph(GraphNode g) {
-        // this function doesnt fully transposes the graph; it only makes the in edges into out edges.
-        GraphNode node = g;
+    public void transposeGraph(AdjacencyListNode<GraphNode> g) {
+        AdjacencyListNode<GraphNode> node = g;
         while (node != null) {
-            GraphEdge outFirst = node.getOutFirst();
-            GraphEdge outLast = node.getOutLast();
-            node.setOutFirst(node.getInFirst());
-            node.setOutLast(node.getInLast());
-            node.setInFirst(outFirst);
-            node.setInLast(outLast);
-            GraphEdge edge = node.getInFirst();
+            GraphEdge outFirst = node.getCurrent().getOutFirst();
+            GraphEdge outLast = node.getCurrent().getOutLast();
+            node.getCurrent().setOutFirst(node.getCurrent().getInFirst());
+            node.getCurrent().setOutLast(node.getCurrent().getInLast());
+            node.getCurrent().setInFirst(outFirst);
+            node.getCurrent().setInLast(outLast);
+            GraphEdge edge = node.getCurrent().getInFirst();
             while (edge != null) {
                 GraphNode tmp = edge.getFrom();
                 edge.setFrom(edge.getTo());
@@ -220,7 +263,7 @@ public class DynamicGraph {
         }
         node = g;
         while (node != null) {
-            GraphEdge edge = node.getInFirst();
+            GraphEdge edge = node.getCurrent().getInFirst();
             while (edge != null) {
                 GraphEdge fromNext = edge.getFromNext();
                 GraphEdge fromPrev = edge.getFromPrev();
@@ -235,37 +278,36 @@ public class DynamicGraph {
         }
     }
 
-    public AdjacencyListNode<GraphNode> dfs(GraphNode g) {
+    public AdjacencyListNode<GraphNode> dfs(AdjacencyListNode<GraphNode> g) {
         // u_start is the beginning of the new Graph in the order of the discovery.
         // GraphNode u_start = g.copyEdgesAndKey();
-        GraphNode graph_node = g;
+        AdjacencyListNode<GraphNode> graph_node = g;
         AdjacencyListNode<GraphNode> newOrderNodes = new AdjacencyListNode<GraphNode>();
         AdjacencyListNode<GraphNode> curNode = newOrderNodes;
-        newOrderNodes.setCurrent(graph_node);
-        graph_node.setColor("w");
-        graph_node.setParent(null);
+        //newOrderNodes.setCurrent(graph_node);
+        graph_node.getCurrent().setColor("w");
+        graph_node.getCurrent().setParent(null);
         graph_node = graph_node.getNext();
         while (graph_node != null) {
-            graph_node.setColor("w");
-            graph_node.setParent(null);
+            graph_node.getCurrent().setColor("w");
+            graph_node.getCurrent().setParent(null);
             graph_node = graph_node.getNext();
         }
         graph_node = g;
         //GraphNode u = u_start;
         while (graph_node != null) {
-            if (graph_node.getColor() == "w") {
-                if (graph_node != newOrderNodes.getCurrent()) {
-                    //GraphNode u_next = graph_node.copyEdgesAndKey();
-                    curNode.setNext(graph_node);
-                    curNode = curNode.getNext();
-                    // u.setNext(u_next);
-                    // u = u_next;
-                }
-                curNode = dfs_visit(graph_node, curNode);
+            if (graph_node.getCurrent().getColor() == "w") {
+//                if (graph_node != newOrderNodes.getCurrent()) {
+//                    //curNode.setNext(graph_node);
+//                    curNode.setPrevious(graph_node);
+//                    curNode = curNode.getPrevious();
+//                    //curNode = curNode.getNext();
+//                }
+                curNode = dfs_visit(graph_node.getCurrent(), curNode);
             }
             graph_node = graph_node.getNext();
         }
-        return newOrderNodes;
+        return curNode;
     }
 
     private AdjacencyListNode<GraphNode> dfs_visit(GraphNode graph_node, AdjacencyListNode<GraphNode> curNode) {
@@ -276,9 +318,9 @@ public class DynamicGraph {
             if (nextNode.getColor() == "w") {
                 //GraphNode u_next = nextNode.copyEdgesAndKey();
                 //u_next.setParent(u);
-                curNode.setNext(nextNode);
+                //curNode.setNext(nextNode);
                 nextNode.setParent(edge.getFrom());
-                curNode = curNode.getNext();
+                //curNode = curNode.getNext();
                 //u.setNext(u_next);
                 //u = u_next;
                 curNode = dfs_visit(nextNode, curNode);
@@ -286,6 +328,13 @@ public class DynamicGraph {
             edge = edge.getFromNext();
         }
         graph_node.setColor("b");
+        if(curNode.isEmpty()){
+            curNode.setCurrent(graph_node);
+        }
+        else {
+            curNode.setPrevious(graph_node);
+            curNode = curNode.getPrevious();
+        }
         return curNode;
     }
     public void cleanTree(GraphNode node){
@@ -293,6 +342,7 @@ public class DynamicGraph {
         {
             node.setRightSibling(null);
             node.setLeftChild(null);
+            node.setLastChild(null);
             node.setParent(null);
             node = node.getNext();
         }
@@ -340,31 +390,22 @@ public class DynamicGraph {
             GraphNode parent;
             if (node.getParent() != null ) {
                 parent = node.getParent();
-                if (parent.getLeftChild() != null) {
-                    node.setRightSibling(parent.getLeftChild());
+                if (parent.getLastChild() != null) {
+                    parent.getLastChild().setRightSibling(node);
+                    parent.setLastChild(node);
                 }
-                parent.setLeftChild(node);
+                else
+                {
+                    parent.setLastChild(node);
+                    parent.setLeftChild(node);
+                }
             }
             node = node.getNext();
         }
         return tree;
     }
 
-    private RootedTree getRootedTree(GraphNode node, RootedTree tree) {
-        while (node != null) {
-            GraphNode parent;
-            if (node.getParent() == null )
-                parent = tree.getRoot();
-            else
-                parent = node.getParent();
-            if (parent.getLeftChild() != null) {
-                node.setRightSibling(parent.getLeftChild());
-            }
-            parent.setLeftChild(node);
-            node = node.getNext();
-        }
-        return tree;
-    }
+
 
     private AdjacencyListNode<GraphNode> bfs_init(GraphNode source) {
         GraphNode node = source.getNext();
