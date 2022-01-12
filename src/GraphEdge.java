@@ -19,6 +19,7 @@ public class GraphEdge {
         }
         this.setFromNext(from.getOutFirst());
         from.setOutFirst(this);
+        this.setFromPrev(null);
 
         if(to.getInFirst() != null)
         {
@@ -30,7 +31,6 @@ public class GraphEdge {
         }
         this.setToNext(to.getInFirst());
         to.setInFirst(this);
-        this.setFromPrev(null);
         this.setToPrev(null);
 
     }
