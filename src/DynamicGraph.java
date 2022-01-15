@@ -135,6 +135,7 @@ public class DynamicGraph {
     }
 
 
+
     public RootedTree scc() {
         RootedTree tree = new RootedTree();
         tree.setRoot(new GraphNode(0));
@@ -373,76 +374,130 @@ public class DynamicGraph {
             node = node.getNext();
         }
     }
-    public RootedTree bfs(GraphNode source) {
-
-        AdjacencyListNode<GraphNode> qtail = bfs_init(source);
-        AdjacencyListNode<GraphNode> cur_node = qtail;
-        AdjacencyListNode<GraphNode> disc_order_start = qtail;
-        AdjacencyListNode<GraphNode> disc_order_cur = disc_order_start;
-        cleanTree(source);
-        while (cur_node != null && !cur_node.isEmpty()){
-            GraphNode graphNode = qtail.getCurrent();
-            if(qtail.getPrevious() != null)
+    public RootedTree bfs(GraphNode source)
+    {
+        AdjacencyListNode<GraphNode> head = bfs_init(source);
+        AdjacencyListNode<GraphNode> tail = head;
+        while(head != null){
+            GraphNode parent = head.getCurrent();
+            GraphEdge edge = parent.getOutFirst();
+            while (edge!=null)
             {
-                qtail = qtail.getPrevious();
-                qtail.setNext(null);
-            }
-            else
-            {
-                qtail = new AdjacencyListNode<>();
-                cur_node = qtail;
-            }
-            GraphEdge edge = graphNode.getOutFirst();
-            while (edge!=null){
-                GraphNode next = edge.getTo();
-                if(next.getColor() == "w"){
-                    disc_order_cur.setNext(next);
-                    disc_order_cur = disc_order_cur.getNext();
-                    next.setColor("g");
-                    next.setParent(graphNode);
-                    if(cur_node.isEmpty())
+                GraphNode child = edge.getTo();
+                if (child.getColor() == "w"){
+                    child.setColor("g");
+                    child.setParent(parent);
+                    tail.setNext(child);
+                    tail = tail.getNext();
+                    if(parent.getLastChild() != null)
                     {
-                        cur_node.setCurrent(next);
+                        parent.getLastChild().setRightSibling(child);
+                        parent.setLastChild(child);
                     }
-                    else
-                    {
-                        cur_node.setPrevious(next);
-                        cur_node = cur_node.getPrevious();
+                    else{
+                        parent.setLeftChild(child);
+                        parent.setLastChild(child);
                     }
                 }
+
                 edge = edge.getFromNext();
             }
-            graphNode.setColor("b");
+            parent.setColor("b");
+            head = head.getNext();
         }
-        AdjacencyListNode<GraphNode> node = disc_order_start.getNext();
         RootedTree tree = new RootedTree();
         tree.setRoot(source);
-        while (node != null) {
-            GraphNode parent;
-            if (node.getCurrent().getParent() != null ) {
-                parent = node.getCurrent().getParent();
-                if (parent.getLastChild() != null) {
-                    parent.getLastChild().setRightSibling(node.getCurrent());
-                    parent.setLastChild(node.getCurrent());
-                }
-                else
-                {
-                    parent.setLastChild(node.getCurrent());
-                    parent.setLeftChild(node.getCurrent());
-                }
-            }
-            node = node.getNext();
-        }
         return tree;
     }
+//    public RootedTree bfs(GraphNode source) {
+//
+//        AdjacencyListNode<GraphNode> qtail = bfs_init(source);
+//        AdjacencyListNode<GraphNode> cur_node = qtail;
+//        AdjacencyListNode<GraphNode> disc_order_start = new AdjacencyListNode<>();
+//        while (cur_node != null && !cur_node.isEmpty()){
+//            GraphNode graphNode = cur_node.getCurrent();
+//            if(qtail.getPrevious() != null)
+//            {
+//                qtail = qtail.getPrevious();
+//                qtail.setNext(null);
+//            }
+//            else
+//            {
+//                qtail = new AdjacencyListNode<>();
+//                cur_node = qtail;
+//            }
+//            GraphEdge edge = graphNode.getOutFirst();
+//            while (edge!=null){
+//                GraphNode next = edge.getTo();
+//                if(next.getColor() == "w"){
+//                    if(disc_order_start.isEmpty())
+//                    {
+//                        disc_order_start.setCurrent(next);
+//                    }
+//                    else
+//                    {
+//                        disc_order_start.setPrevious(next);
+//                        disc_order_start = disc_order_start.getPrevious();
+//                    }
+//
+//
+//                    next.setColor("g");
+//                    next.setParent(graphNode);
+//                    if(graphNode.getLeftChild() ==null)
+//                    {
+//                        graphNode.setLeftChild(next);
+//                        graphNode.setLastChild(next);
+//                    }
+//                    else
+//                    {
+//                        graphNode.getLastChild().setRightSibling(next);
+//                    }
+//                    if(cur_node.isEmpty())
+//                    {
+//                        cur_node.setCurrent(next);
+//                    }
+//                    else
+//                    {
+//                        cur_node.setPrevious(next);
+//                        cur_node = cur_node.getPrevious();
+//                    }
+//                }
+//                edge = edge.getFromNext();
+//            }
+//            graphNode.setColor("b");
+//        }
+//        AdjacencyListNode<GraphNode> node = disc_order_start;
+//        RootedTree tree = new RootedTree();
+//        tree.setRoot(source);
+////        while (node != null && !node.isEmpty()) {
+////            GraphNode parent;
+////            if (node.getCurrent().getParent() != null ) {
+////                parent = node.getCurrent().getParent();
+////                if (parent.getLastChild() != null) {
+////                    parent.getLastChild().setRightSibling(node.getCurrent());
+////                    parent.setLastChild(node.getCurrent());
+////                }
+////                else
+////                {
+////                    parent.setLastChild(node.getCurrent());
+////                    parent.setLeftChild(node.getCurrent());
+////                }
+////            }
+////            node = node.getNext();
+////        }
+//        return tree;
+//    }
 
 
 
     private AdjacencyListNode<GraphNode> bfs_init(GraphNode source) {
-        GraphNode node = source.getNext();
+        GraphNode node = this.firstNode;
         while (node != null){
             node.setColor("w");
             node.setParent(null);
+            node.setRightSibling(null);
+            node.setLastChild(null);
+            node.setLeftChild(null);
             node = node.getNext();
         }
         source.setParent(null);
