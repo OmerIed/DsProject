@@ -50,7 +50,8 @@ public class RootedTree {
                 current_layer = next_layer;
                 current_layer_start.remove(current_layer_start);
                 next_layer = current_layer_start;
-                out.writeBytes(System.lineSeparator());
+                if(current_layer!=null&&!current_layer.isEmpty())
+                    out.writeBytes(System.lineSeparator());
             }
         }
     }

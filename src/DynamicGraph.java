@@ -342,7 +342,7 @@ public class DynamicGraph {
         GraphEdge edge = graph_node.getOutFirst();
         while (edge != null) {
             GraphNode nextNode = edge.getTo();
-            if (nextNode.getColor() == "w") {
+            if (nextNode.getColor().equals("w")) {
                 //GraphNode u_next = nextNode.copyEdgesAndKey();
                 //u_next.setParent(u);
                 //curNode.setNext(nextNode);
@@ -384,7 +384,7 @@ public class DynamicGraph {
             while (edge!=null)
             {
                 GraphNode child = edge.getTo();
-                if (child.getColor() == "w"){
+                if (child.getColor().equals("w")){
                     child.setColor("g");
                     child.setParent(parent);
                     tail.setNext(child);
