@@ -21,7 +21,6 @@ public class RootedTree {
                 current_layer_start = current_layer;
             }
             GraphNode node = current_layer.getCurrent();
-            //GraphEdge edge = node.getOutFirst();
             GraphNode child = node.getLeftChild();
             while (child != null)
             {
@@ -46,7 +45,6 @@ public class RootedTree {
             }
             else
             {
-                temp = current_layer;
                 current_layer = next_layer;
                 current_layer_start.remove(current_layer_start);
                 next_layer = current_layer_start;

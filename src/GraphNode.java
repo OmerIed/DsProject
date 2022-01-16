@@ -111,15 +111,6 @@ public class GraphNode {
     public void setColor(String color) {
         this.color = color;
     }
-    public GraphNode copyEdgesAndKey(){
-        GraphNode node = new GraphNode(this.key);
-        node.setInFirst(this.inFirst);
-        node.setInLast(this.inLast);
-        node.setOutLast(this.outLast);
-        node.setOutFirst(this.outFirst);
-        node.setParent(this.parent);
-        return node;
-    }
 
     public GraphNode getParent() {
         return parent;

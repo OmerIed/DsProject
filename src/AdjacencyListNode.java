@@ -37,18 +37,6 @@ public class AdjacencyListNode<T> {
         this.previous = new AdjacencyListNode<T>(item);
         this.previous.next = this;
     }
-    public int getLength()
-    {
-        if(this.value==null)
-            return 0;
-        int count = 1;
-        AdjacencyListNode<T> x = this.next;
-        while (x != null){
-            count++;
-            x = x.next;
-        }
-        return count;
-    }
     public boolean isEmpty(){
         return value == null;
     }
